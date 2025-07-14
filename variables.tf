@@ -1,3 +1,9 @@
+# General
+variable "azs" {
+  description = "List of availability zones used by the firewall"
+  type        = list(string)
+}
+
 variable "fivetuple_stateful_rule_group" {
   description = "Config for 5-tuple type stateful rule group"
   type        = list(any)
