@@ -12,3 +12,13 @@ output "network_firewall_endpoint_id" {
   description = "Created Network Firewall endpoint id"
   value       = flatten(aws_networkfirewall_firewall.main.firewall_status[*].sync_states[*].*.attachment[*])[*].endpoint_id
 }
+
+output "network_firewall_endpoint_ids" {
+  description = "Ordered list of Network Firewall endpoint IDs per AZ"
+  value = [
+    for az in var.azs : one([
+      for sync_states in aws_networkfirewall_firewall.main.firewall_status[0].sync_states :
+      sync_states.attachment[0].endpoint_id if sync_states.availability_zone == az
+    ])
+  ]
+}
