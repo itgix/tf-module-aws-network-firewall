@@ -1,8 +1,9 @@
 # Network firewall service
 resource "aws_networkfirewall_firewall" "main" {
-  name                = var.firewall_name
-  firewall_policy_arn = aws_networkfirewall_firewall_policy.main.arn
-  vpc_id              = var.vpc_id
+  name                   = var.firewall_name
+  firewall_policy_arn    = aws_networkfirewall_firewall_policy.main.arn
+  vpc_id                 = var.vpc_id
+  enabled_analysis_types = var.enable_analysis_types
 
   dynamic "subnet_mapping" {
     for_each = var.subnet_mapping

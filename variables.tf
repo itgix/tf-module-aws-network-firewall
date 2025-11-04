@@ -102,3 +102,9 @@ variable "netfw_kinesis_firehose_delivery_stream" {
   type        = string
   default     = ""
 }
+
+variable "enable_analysis_types" {
+  type        = list(any)
+  default     = []
+  description = "Wether to enable traffic analysis mode - Collects data on frequently accessed domains observed in customer traffic to generate a domain insights report and create domain-based firewall rules. You can generate reports in the Monitoring and observability tab of your firewall."
+}
