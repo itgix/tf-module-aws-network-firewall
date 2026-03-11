@@ -68,6 +68,12 @@ variable "netfw_cloudwatch_logs_enabled" {
   default     = false
 }
 
+variable "netfw_cloudwatch_log_group_retention_in_days" {
+  description = "Specifies the number of days you want to retain log events in the specified log group for Network Firewall logs"
+  type        = number
+  default     = 365
+}
+
 variable "netfw_s3_logs_enabled" {
   description = "Weather to enable S3 logs for Network firewall"
   type        = bool
