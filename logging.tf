@@ -20,8 +20,15 @@ resource "aws_networkfirewall_logging_configuration" "cloudwatch_log_group" {
 resource "aws_cloudwatch_log_group" "netfw_cloudwatch_logs" {
   count = var.netfw_cloudwatch_logs_enabled == true ? 1 : 0
   name  = var.netfw_cloudwatch_log_group_name
+  retention_in_days = var.netfw_cloudwatch_log_group_retention_in_days
 
   tags = merge(var.tags)
+
+  lifecycle {
+    ignore_changes = [
+        retention_in_days
+    ]
+  }
 }
 
 # TODO: S3 and Kinesis firehose are not tested
