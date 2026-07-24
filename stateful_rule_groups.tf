@@ -19,7 +19,10 @@ resource "aws_networkfirewall_rule_group" "suricata_stateful_group" {
         ip_sets {
           key = rule_variables.value.key
           ip_set {
-            definition = [rule_variables.value.ip_set]
+            # Accept either a single CIDR (string) or a list of CIDRs. flatten()
+            # wraps a bare string into a 1-element list and leaves a list as-is,
+            # so HOME_NET can carry both IPv4 and IPv6 ranges (dual-stack).
+            definition = flatten([rule_variables.value.ip_set])
           }
         }
       }
