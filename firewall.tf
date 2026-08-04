@@ -8,7 +8,8 @@ resource "aws_networkfirewall_firewall" "main" {
   dynamic "subnet_mapping" {
     for_each = var.subnet_mapping
     content {
-      subnet_id = subnet_mapping.value.subnet_id
+      subnet_id       = subnet_mapping.value.subnet_id
+      ip_address_type = subnet_mapping.value.ip_address_type
     }
   }
   tags = merge(var.tags)
