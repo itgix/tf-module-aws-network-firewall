@@ -54,6 +54,23 @@ variable "stateless_default_actions" {
   default     = "forward_to_sfe"
 }
 
+variable "stateful_engine_rule_order" {
+  description = "Stateful engine rule order. Only STRICT_ORDER is supported."
+  type        = string
+  default     = "STRICT_ORDER"
+
+  validation {
+    condition     = var.stateful_engine_rule_order == "STRICT_ORDER"
+    error_message = "stateful_engine_rule_order must be STRICT_ORDER."
+  }
+}
+
+variable "stateful_default_actions" {
+  description = "Default action(s) for packets that match no stateful rule, e.g. [\"aws:drop_established_app_layer\"]."
+  type        = list(string)
+  default     = []
+}
+
 variable "stateless_fragment_default_actions" {
   description = "Default Stateless action for fragmented packets"
   type        = string

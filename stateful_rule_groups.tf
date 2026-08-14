@@ -28,6 +28,11 @@ resource "aws_networkfirewall_rule_group" "suricata_stateful_group" {
       }
     }
 
+    # Must match the firewall policy's rule order (STRICT_ORDER)
+    stateful_rule_options {
+      rule_order = var.stateful_engine_rule_order
+    }
+
   }
 
   tags = merge(var.tags)
@@ -93,6 +98,11 @@ resource "aws_networkfirewall_rule_group" "fivetuple_stateful_group" {
           }
         }
       }
+    }
+
+    # Must match the firewall policy's rule order (STRICT_ORDER)
+    stateful_rule_options {
+      rule_order = var.stateful_engine_rule_order
     }
   }
 

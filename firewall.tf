@@ -23,6 +23,12 @@ resource "aws_networkfirewall_firewall_policy" "main" {
     stateless_default_actions          = ["aws:${var.stateless_default_actions}"]
     stateless_fragment_default_actions = ["aws:${var.stateless_fragment_default_actions}"]
 
+    stateful_engine_options {
+      rule_order = var.stateful_engine_rule_order
+    }
+
+    stateful_default_actions = var.stateful_default_actions
+
     # Stateless Rule Group Reference
     dynamic "stateless_rule_group_reference" {
       for_each = local.this_stateless_group_arn
@@ -38,6 +44,8 @@ resource "aws_networkfirewall_firewall_policy" "main" {
       for_each = local.this_stateful_group_arn
       content {
         resource_arn = stateful_rule_group_reference.value
+        # Required for STRICT_ORDER (evaluation order between rule groups)
+        priority = index(local.this_stateful_group_arn, stateful_rule_group_reference.value) + 1
       }
     }
   }
