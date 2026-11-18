@@ -1,7 +1,41 @@
 # General
-variable "azs" {
-  description = "List of availability zones used by the firewall"
+variable "transit_gateway_id" {
+  description = "ID of the Transit Gateway the firewall is attached to. Either a Transit Gateway owned by this account or one shared with it through AWS RAM. Changing it replaces the firewall."
+  type        = string
+}
+
+variable "availability_zone_ids" {
+  description = "Availability Zone IDs (e.g. euc1-az1, not AZ names) in which firewall endpoints are created. The Transit Gateway must already be enabled in these AZs, i.e. it must have a VPC attachment with a subnet in each of them."
   type        = list(string)
+
+  validation {
+    condition     = length(var.availability_zone_ids) > 0
+    error_message = "At least one Availability Zone ID is required."
+  }
+}
+
+variable "firewall_description" {
+  description = "Description of the firewall"
+  type        = string
+  default     = null
+}
+
+variable "delete_protection" {
+  description = "Protect the firewall against deletion. Must be set to false (and applied) before the firewall can be destroyed."
+  type        = bool
+  default     = false
+}
+
+variable "availability_zone_change_protection" {
+  description = "Protect the firewall against changes to its Availability Zone configuration."
+  type        = bool
+  default     = false
+}
+
+variable "home_net_cidrs" {
+  description = "CIDRs set as the firewall policy HOME_NET variable. Required for Transit Gateway attached firewalls when rule groups rely on the default HOME_NET (e.g. domain list rule groups). Empty list = not set."
+  type        = list(string)
+  default     = []
 }
 
 variable "fivetuple_stateful_rule_group" {
@@ -31,15 +65,6 @@ variable "firewall_name" {
   description = "firewall name"
   type        = string
   default     = "example"
-}
-
-variable "subnet_mapping" {
-  description = "Subnet ids mapping to have individual firewall endpoint"
-}
-
-variable "vpc_id" {
-  description = "VPC ID"
-  type        = string
 }
 
 variable "tags" {
